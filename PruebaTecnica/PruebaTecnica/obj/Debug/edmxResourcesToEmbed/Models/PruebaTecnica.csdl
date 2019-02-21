@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PruebaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Cliente">
+    <Key>
+      <PropertyRef Name="Cedula" />
+    </Key>
+    <Property Name="Nombre" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Apellido" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Cedula" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CuentaBancaria" Relationship="Self.FK_CuentaBancaria_Cliente" FromRole="Cliente" ToRole="CuentaBancaria" />
+  </EntityType>
+  <EntityType Name="CuentaBancaria">
+    <Key>
+      <PropertyRef Name="Numero_cuenta" />
+    </Key>
+    <Property Name="Numero_cuenta" Type="Int32" Nullable="false" />
+    <Property Name="Cedula" Type="Int32" />
+    <Property Name="Fecha_apertura" Type="DateTime" Precision="0" />
+    <Property Name="Monto" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="Cliente" Relationship="Self.FK_CuentaBancaria_Cliente" FromRole="CuentaBancaria" ToRole="Cliente" />
+  </EntityType>
+  <Association Name="FK_CuentaBancaria_Cliente">
+    <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+    <End Role="CuentaBancaria" Type="Self.CuentaBancaria" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cliente">
+        <PropertyRef Name="Cedula" />
+      </Principal>
+      <Dependent Role="CuentaBancaria">
+        <PropertyRef Name="Cedula" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PruebaEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Cliente" EntityType="Self.Cliente" />
+    <EntitySet Name="CuentaBancaria" EntityType="Self.CuentaBancaria" />
+    <AssociationSet Name="FK_CuentaBancaria_Cliente" Association="Self.FK_CuentaBancaria_Cliente">
+      <End Role="Cliente" EntitySet="Cliente" />
+      <End Role="CuentaBancaria" EntitySet="CuentaBancaria" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PruebaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Cliente">
+    <Key>
+      <PropertyRef Name="Cedula" />
+    </Key>
+    <Property Name="Nombre" Type="nchar" MaxLength="10" />
+    <Property Name="Apellido" Type="nchar" MaxLength="10" />
+    <Property Name="Cedula" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CuentaBancaria">
+    <Key>
+      <PropertyRef Name="Numero_cuenta" />
+    </Key>
+    <Property Name="Numero_cuenta" Type="int" Nullable="false" />
+    <Property Name="Cedula" Type="int" />
+    <Property Name="Fecha_apertura" Type="date" />
+    <Property Name="Monto" Type="money" />
+  </EntityType>
+  <Association Name="FK_CuentaBancaria_Cliente">
+    <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+    <End Role="CuentaBancaria" Type="Self.CuentaBancaria" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cliente">
+        <PropertyRef Name="Cedula" />
+      </Principal>
+      <Dependent Role="CuentaBancaria">
+        <PropertyRef Name="Cedula" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PruebaModelStoreContainer">
+    <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CuentaBancaria" EntityType="Self.CuentaBancaria" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_CuentaBancaria_Cliente" Association="Self.FK_CuentaBancaria_Cliente">
+      <End Role="Cliente" EntitySet="Cliente" />
+      <End Role="CuentaBancaria" EntitySet="CuentaBancaria" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
